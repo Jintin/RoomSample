@@ -1,7 +1,7 @@
 package com.jintin.roomsample
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -14,6 +14,9 @@ interface UserDao {
     @Delete
     suspend fun delete(user: User)
 
+    @Query("SELECT * FROM users WHERE user = :name")
+    suspend fun getUser(name: String): User
+
     @Query("SELECT * FROM users")
-    fun list(): LiveData<List<User>>
+    fun list(): Flow<List<User>>
 }

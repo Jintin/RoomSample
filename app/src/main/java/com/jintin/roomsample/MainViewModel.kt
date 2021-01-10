@@ -2,6 +2,7 @@ package com.jintin.roomsample
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -12,7 +13,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val userDao = database.userDao()
     private val userName = listOf("Peter", "Jane", "Tim", "Tina")
 
-    val liveData = database.userDao().list()
+    val liveData = database.userDao().list().asLiveData()
 
     fun update(user: User) {
         viewModelScope.launch {
