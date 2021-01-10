@@ -9,6 +9,7 @@ data class User(
     @ColumnInfo(name = "user")
     val name: String,
     val age: Int,
+    val address: String? = null,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 ) {

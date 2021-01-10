@@ -41,7 +41,7 @@ class DbTest {
 
     @Test
     fun testSelect() = runBlocking {
-        val user = User("Peter", 23)
+        val user = User("Peter", 23, "")
         userDao.insert(user)
         val result = userDao.getUser(user.name)
         assert(user == result)
