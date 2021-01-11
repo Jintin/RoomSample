@@ -1,8 +1,10 @@
 package com.jintin.roomsample
 
+import androidx.room.Room
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.platform.app.InstrumentationRegistry
+import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import java.io.IOException
@@ -34,5 +36,26 @@ class MigrationTest {
                 assert(false)
             }
         }
+    }
+
+    @Test
+    fun migrateAll() {
+        helper.createDatabase(TEST_DB, 1).apply {
+            execSQL("INSERT INTO `users` VALUES ('Peter', '23', '1')")
+            close()
+        }
+        Room.databaseBuilder(
+            InstrumentationRegistry.getInstrumentation().targetContext,
+            UserDatabase::class.java,
+            TEST_DB
+        ).addMigrations(UserDatabase.MIGRATION_1_2).build().apply {
+            checkUser(this.userDao(), "Peter", 23)
+            close()
+        }
+    }
+
+    private fun checkUser(userDao: UserDao, name: String, age: Int) = runBlocking {
+        val user = userDao.getUser(name)
+        assert(user.age == age)
     }
 }
